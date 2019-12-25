@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ch.dao.AreaDao">
+    <!-- 配置查询所有操作 -->
+    <select id="findAll" resultType="area">
+        select * from area;
+    </select>
+    <!--配置查询一个操作-->
+    <select id="findById" resultType="area" parameterType="java.lang.Integer">
+        SELECT * FROM area WHERE id=#{id};
+    </select>
+    <!--保存-->
+    <insert id="save" parameterType="area">
+        <selectKey keyColumn="id" keyProperty="id" resultType="int">
+            select last_insert_id();
+        </selectKey>
+        INSERT INTO area(code,name,citycode)VALUES (#{code},#{name},#{citycode});
+    </insert>
+    <!--修改-->
+    <update id="update" parameterType="area">
+        UPDATE area SET code=#{code},name=#{name},citycode=#{citycode} WHERE id=#{id};
+    </update>
+
+    <!--根据id删除-->
+    <delete id="delete" parameterType="int">
+        DELETE FROM area WHERE id=#{id};
+    </delete>
+    <!--统计条数-->
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM area;
+    </select>
+
+    <!--模糊查询-->
+    <select id="findByMoHu" resultType="area" parameterType="String">
+        SELECT * from area where name like #{name};
+    </select>
+
+    <!--分页查询-->
+    <select id="findByPage" resultType="area" parameterType="map">
+        SELECT * FROM  area limit #{currentIndex},#{pageSize};
+    </select>
+
+    <!--动态查询-->
+
+    <select id="findByDt" resultType="area" parameterType="area">
+        SELECT * from area where 1=1
+        <if test="name!=null and name!=''">
+            AND name LIKE #{name}
+        </if>
+    </select>
+</mapper>
+
